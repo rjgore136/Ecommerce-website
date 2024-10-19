@@ -12,7 +12,11 @@ const AuthRegister = () => {
 
   const [formData, setFormData] = useState(initialState);
 
-  function onSubmit() {}
+  function onSubmit(e) {
+    e.preventDefault();
+  }
+
+  console.log(formData);
 
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
