@@ -1,4 +1,4 @@
-import User from "../../models/User";
+import User from "../../models/User.js";
 import bycrypt from "bcryptjs";
 
 export const registerUser = async (req, res) => {
@@ -6,11 +6,16 @@ export const registerUser = async (req, res) => {
   try {
     //validate the input fields
     if (!userName || !email || !password) {
-      throw new Error("Fill in all details!!");
+      return res.json({
+        success: false,
+        message: "Fill in all fields!!",
+      });
     }
 
     //check if user already exists
-    const checkUser = User.findOne({ email });
+    const checkUser = await User.findOne({ email });
+    console.log(checkUser);
+
     if (checkUser) {
       return res.json({
         success: false,

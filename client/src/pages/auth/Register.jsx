@@ -1,7 +1,10 @@
 import CommonForm from "@/components/common/Form";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerFormControls } from "@/config";
+import { useDispatch } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
+import { registerUser } from "@/store/auth/authSlice";
 
 const AuthRegister = () => {
   const initialState = {
@@ -11,9 +14,25 @@ const AuthRegister = () => {
   };
 
   const [formData, setFormData] = useState(initialState);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   function onSubmit(e) {
     e.preventDefault();
+    dispatch(registerUser(formData)).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: data?.payload?.message,
+        });
+        navigate("/auth/login");
+      } else {
+        toast({
+          title: data?.payload?.message,
+          variant: "destructive",
+        });
+      }
+    });
   }
 
   console.log(formData);

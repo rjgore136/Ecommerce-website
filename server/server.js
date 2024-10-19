@@ -18,7 +18,7 @@ connectDB(url);
 //middlewares
 app.use(
   cors({
-    origin: "htpp:localhost:5173",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
