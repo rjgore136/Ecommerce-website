@@ -55,7 +55,7 @@ export const loginUser = async (req, res) => {
   try {
     //validating the inputs
     if (!email || !password) {
-      res.status(500).json({
+      return res.json({
         success: false,
         message: "Fill in all details!!",
       });
@@ -65,7 +65,7 @@ export const loginUser = async (req, res) => {
     console.log(checkUser);
 
     if (!checkUser) {
-      res.status(500).json({
+      return res.json({
         success: false,
         message: "User doesn't exist! Please try again.",
       });
@@ -75,6 +75,8 @@ export const loginUser = async (req, res) => {
         password,
         checkUser.password
       );
+      console.log(isPasswordValid);
+
       if (isPasswordValid) {
         //create a token
         const token = jwt.sign(
@@ -85,7 +87,7 @@ export const loginUser = async (req, res) => {
             userName: checkUser.userName,
           },
           process.env.SECRET_KEY,
-          { expiresIn: "60m" }
+          { expiresIn: "1m" }
         );
 
         //send the token via cookie
@@ -100,7 +102,7 @@ export const loginUser = async (req, res) => {
           },
         });
       } else {
-        res.status(500).json({
+        return res.json({
           success: false,
           message: "Incorrect Password!! Please try again.",
         });
@@ -120,4 +122,27 @@ export const logoutUser = async (req, res) => {
     success: true,
     message: "Logged out successfully!",
   });
+};
+
+export const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
 };

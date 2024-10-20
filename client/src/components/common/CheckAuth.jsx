@@ -5,7 +5,7 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
   const role = user?.role;
 
-  console.log(location.pathname, isAuthenticated, role);
+  // console.log(location.pathname, isAuthenticated, role);
 
   // Redirect based on authentication status and role at the root path
   if (location.pathname === "/") {
