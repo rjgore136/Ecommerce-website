@@ -16,13 +16,11 @@ import Listing from "./pages/shopping-view/Listing";
 import Checkout from "./pages/shopping-view/Checkout";
 import CheckAuth from "./components/common/CheckAuth";
 import UnAuth from "./pages/unauth-page/UnAuth";
+import { useSelector } from "react-redux";
 
 const App = () => {
-  const isAuthenticated = false;
-  const user = {
-    name: "Ritesh",
-    role: "user",
-  };
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
