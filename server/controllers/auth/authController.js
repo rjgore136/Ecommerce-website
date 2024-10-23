@@ -87,7 +87,7 @@ export const loginUser = async (req, res) => {
             userName: checkUser.userName,
           },
           process.env.SECRET_KEY,
-          { expiresIn: "1m" }
+          { expiresIn: "60m" }
         );
 
         //send the token via cookie
@@ -128,7 +128,7 @@ export const authMiddleware = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({
+    return res.json({
       success: false,
       message: "Unauthorised user!",
     });
@@ -140,7 +140,7 @@ export const authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    res.status(401).json({
+    res.json({
       success: false,
       message: "Unauthorised user!",
     });

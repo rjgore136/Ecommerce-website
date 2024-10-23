@@ -1,4 +1,4 @@
-import { Label } from "@radix-ui/react-label";
+import { Label } from "../ui/label";
 import React from "react";
 import { Input } from "../ui/input";
 import {
@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
@@ -22,7 +22,7 @@ const CommonForm = ({
     let element = null;
     const value = formData[controlItem.name] || "";
 
-    switch (controlItem.type) {
+    switch (controlItem.componentType) {
       case "input":
         element = (
           <Input
@@ -50,19 +50,20 @@ const CommonForm = ({
                 [controlItem.name]: value,
               })
             }
+            value={value}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={controlItem.placeholder}></SelectValue>
-              <SelectContent>
-                {controlItem.options && controlItem.options.length > 0
-                  ? controlItem.options.map((optionItem) => (
-                      <SelectItem key={optionItem.id} value={optionItem.id}>
-                        {optionItem.label}
-                      </SelectItem>
-                    ))
-                  : null}
-              </SelectContent>
+              <SelectValue placeholder={controlItem.label}></SelectValue>
             </SelectTrigger>
+            <SelectContent>
+              {controlItem.options && controlItem.options.length > 0
+                ? controlItem.options.map((optionItem) => (
+                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                      {optionItem.label}
+                    </SelectItem>
+                  ))
+                : null}
+            </SelectContent>
           </Select>
         );
         break;
@@ -110,7 +111,9 @@ const CommonForm = ({
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem) => (
           <div className="grid w-full gap-1.5" key={controlItem.name}>
-            <Label className="mb-1">{controlItem.label}</Label>
+            <Label className="mb-1" htmlFor={controlItem.name}>
+              {controlItem.label}
+            </Label>
             {renderInputs(controlItem)}
           </div>
         ))}

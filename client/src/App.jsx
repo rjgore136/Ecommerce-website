@@ -28,7 +28,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(checkAuth());
-  }, dispatch);
+  }, [dispatch]);
 
   if (isLoading)
     return <Skeleton className="w-[100px] h-[20px] rounded-full" />;
