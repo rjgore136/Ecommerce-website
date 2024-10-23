@@ -1,17 +1,20 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { handler } from "tailwindcss-animate";
 import { SelectLabel } from "../ui/select";
 import { UploadCloudIcon, FileIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import axios from "axios";
 
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
+  setImageLoadingState,
 }) => {
+  const baseUrl = import.meta.env.VITE_baseUrl;
   const imageRef = useRef();
 
   function handleUploadFile(e) {
@@ -40,6 +43,30 @@ const ProductImageUpload = ({
       imageRef.current.value = "";
     }
   }
+
+  async function uploadImageToCloudinary() {
+    try {
+      setImageLoadingState(true);
+      const data = new FormData();
+      data.append("my_file", imageFile);
+      const response = await axios.post(
+        `${baseUrl}/admin/products/upload-image`,
+        data
+      );
+
+      console.log(response.data);
+      if (response?.data?.success) {
+        setUploadedImageUrl(response.data.result.url);
+        setImageLoadingState(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (imageFile !== null) uploadImageToCloudinary();
+  }, [imageFile]);
 
   return (
     <div className="w-full max-w-md mx-auto mt-4">

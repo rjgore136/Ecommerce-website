@@ -4,6 +4,7 @@ import connectDB from "./DB/db.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth/auth-route.js";
+import productsRouter from "./routes/admin/products-routes.js";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.use("/api/auth", authRouter);
+app.use("/api/admin/products", productsRouter);
 
 app.listen(port, (req, res) => {
   console.log(`The server is running on http://localhost:${port}`);
