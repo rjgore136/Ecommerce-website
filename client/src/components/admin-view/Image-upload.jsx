@@ -6,13 +6,16 @@ import { SelectLabel } from "../ui/select";
 import { UploadCloudIcon, FileIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { Skeleton } from "../ui/skeleton";
 
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
+  imageLoadingState,
   setImageLoadingState,
+  isEditMode,
 }) => {
   const baseUrl = import.meta.env.VITE_baseUrl;
   const imageRef = useRef();
@@ -74,7 +77,9 @@ const ProductImageUpload = ({
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-lg p-4`}
+        className={`${
+          isEditMode ? "opacity-60" : ""
+        } border-2 border-dashed rounded-lg p-4`}
       >
         <Input
           id="image-upload"
@@ -82,17 +87,22 @@ const ProductImageUpload = ({
           className="hidden"
           ref={imageRef}
           onChange={handleUploadFile}
+          disabled={isEditMode}
         />
         {!imageFile ? (
           <Label
             htmlFor="image-upload"
-            className={`flex flex-col items-center justify-center h-32 cursor-pointer`}
+            className={`${
+              isEditMode ? "cursor-not-allowed" : ""
+            } flex flex-col items-center justify-center h-32 cursor-pointer`}
           >
             <UploadCloudIcon
               className={`w-10 h-10 text-muted-foreground mb-2`}
             />
             <span>Drag and drop or click to upload image</span>
           </Label>
+        ) : imageLoadingState ? (
+          <Skeleton className={`h-10 bg-gray-100`} />
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center">

@@ -1,5 +1,5 @@
 import ProductImageUpload from "@/components/admin-view/image-upload";
-// import AdminProductTile from "@/components/admin-view/product-tile";
+import AdminProductTile from "@/components/admin-view/product-tile";
 import CommonForm from "@/components/common/form";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,14 +8,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-// import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { addProductFormElements } from "@/config";
-// import {
-//   addNewProduct,
-//   deleteProduct,
-//   editProduct,
-//   fetchAllProducts,
-// } from "@/store/admin/products-slice";
+import {
+  addNewProduct,
+  deleteProduct,
+  editProduct,
+  fetchAllProducts,
+} from "@/store/admin/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -40,9 +40,9 @@ function AdminProducts() {
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
-  // const { productList } = useSelector((state) => state.adminProducts);
+  const { productsList } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
-  // const { toast } = useToast();
+  const { toast } = useToast();
 
   function onSubmit(event) {
     event.preventDefault();
@@ -61,6 +61,9 @@ function AdminProducts() {
             setFormData(initialFormData);
             setOpenCreateProductsDialog(false);
             setCurrentEditedId(null);
+            toast({
+              title: "Product edited successfully",
+            });
           }
         })
       : dispatch(
@@ -75,7 +78,7 @@ function AdminProducts() {
             setImageFile(null);
             setFormData(initialFormData);
             toast({
-              title: "Product add successfully",
+              title: "Product added successfully",
             });
           }
         });
@@ -85,6 +88,10 @@ function AdminProducts() {
     dispatch(deleteProduct(getCurrentProductId)).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchAllProducts());
+        toast({
+          title: "Product deleted successfully",
+          variant: "destructive",
+        });
       }
     });
   }
@@ -96,11 +103,12 @@ function AdminProducts() {
       .every((item) => item);
   }
 
-  // useEffect(() => {
-  //   dispatch(fetchAllProducts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+    // console.log(productsList);
+  }, [dispatch]);
 
-  console.log(formData, "productList");
+  // console.log(formData, uploadedImageUrl, "productList");
 
   return (
     <Fragment>
@@ -110,9 +118,10 @@ function AdminProducts() {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {/* {productList && productList.length > 0
-          ? productList.map((productItem) => (
+        {productsList && productsList.length > 0
+          ? productsList.map((productItem) => (
               <AdminProductTile
+                key={productItem._id}
                 setFormData={setFormData}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
@@ -120,7 +129,7 @@ function AdminProducts() {
                 handleDelete={handleDelete}
               />
             ))
-          : null} */}
+          : null}
       </div>
       <Sheet
         open={openCreateProductsDialog}
@@ -134,7 +143,6 @@ function AdminProducts() {
           <SheetHeader>
             <SheetTitle>
               {currentEditedId !== null ? "Edit Product" : "Add New Product"}
-              {/* Add New Product */}
             </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
