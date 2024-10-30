@@ -8,6 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { addProductFormElements } from "@/config";
 import {
@@ -141,6 +142,7 @@ function AdminProducts() {
       >
         <SheetContent side="right" className="overflow-auto">
           <SheetHeader>
+            {/* <DialogTitle className="sr-only">Toggle Header Menu</DialogTitle> */}
             <SheetTitle>
               {currentEditedId !== null ? "Edit Product" : "Add New Product"}
             </SheetTitle>

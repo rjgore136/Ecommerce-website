@@ -8,6 +8,7 @@ import {
 } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { shoppingViewHeaderMenuItems } from "@/config";
 import {
@@ -18,18 +19,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-
+import { useState } from "react";
 import { Avatar } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "@/store/auth/authSlice.js";
 
-const MenuItems = () => {
+const MenuItems = ({ setOpen }) => {
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row sm:mt-5 sm:ml-7">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Link
-          // onClick={() => handleNavigate(menuItem)}
+          // onClick={() => {
+          //   setOpen ? setOpen(false) : null;
+          // }}
           className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
           to={menuItem.path}
@@ -85,6 +88,7 @@ const HeaderRightContent = () => {
 };
 
 const ShoppingHeader = () => {
+  const [openSidebar, setOpenSidebar] = useState(false);
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -97,10 +101,16 @@ const ShoppingHeader = () => {
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="lg:hidden">
                 <Menu className="h-6 w-6" />
+                <DialogTitle className="sr-only">
+                  Toggle Header Menu
+                </DialogTitle>
                 <span className="sr-only">Toggle header menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs">
+              <DialogDescription className="sr-only">
+                This is the menu
+              </DialogDescription>
               <SheetHeader>
                 <SheetTitle>
                   <Link
