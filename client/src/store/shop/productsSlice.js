@@ -10,11 +10,15 @@ const initialState = {
 
 export const fetchFilteredProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async () => {
-    console.log("Fetch");
+  async ({ filterParams, sortParams }) => {
+    // console.log("Fetch");
 
     try {
-      const response = await axios.get(`${baseUrl}/shop/products/get`);
+      const query = new URLSearchParams({
+        ...filterParams,
+        sortBy: sortParams,
+      });
+      const response = await axios.get(`${baseUrl}/shop/products/get?${query}`);
       console.log(response.data);
 
       return response.data;
@@ -31,7 +35,7 @@ const shoppingProductSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchFilteredProducts.pending, (state, action) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = true;
       })
