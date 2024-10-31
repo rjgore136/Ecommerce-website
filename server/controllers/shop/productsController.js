@@ -44,3 +44,27 @@ export const getFilteredProducts = async (req, res) => {
     });
   }
 };
+
+export const getProductDetails = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.find({ _id: id });
+    if (!product) {
+      res.json({
+        success: false,
+        message: "Product not found!!",
+      });
+    }
+
+    res.json({
+      success: true,
+      product: product,
+    });
+  } catch (error) {
+    console.log(e);
+    res.json({
+      success: false,
+      message: "Failed to fetch the product details!!",
+    });
+  }
+};

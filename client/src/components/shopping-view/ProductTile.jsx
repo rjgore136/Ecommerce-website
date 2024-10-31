@@ -5,18 +5,17 @@ import { Badge } from "../ui/badge";
 
 function ShoppingProductTile({
   product,
-  //   handleGetProductDetails,
+  handleGetProductDetails,
   //   handleAddtoCart,
 }) {
   return (
     <Card className="w-full max-w-sm mx-auto">
-      {/* onClick={() => handleGetProductDetails(product?._id)} */}
-      <div>
+      <div onClick={() => handleGetProductDetails(product?._id)}>
         <div className="relative">
           <img
             src={product?.image}
             alt={product?.title}
-            className="w-full h-[300px] object-cover rounded-t-lg"
+            className="w-full h-[300px] object-cover rounded-t-lg cursor-pointer"
           />
           {product?.totalStock === 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
@@ -48,7 +47,7 @@ function ShoppingProductTile({
                 product?.salePrice > 0 ? "line-through" : ""
               } text-lg font-semibold text-primary`}
             >
-              ${product?.price}
+              ₹{product?.price}
             </span>
             {product?.salePrice > 0 ? (
               <span className="text-lg font-semibold text-primary">

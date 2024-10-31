@@ -12,16 +12,23 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDownIcon } from "lucide-react";
 import { sortOptions } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFilteredProducts } from "@/store/shop/productsSlice";
+import {
+  fetchFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/productsSlice";
 import ShoppingProductTile from "@/components/shopping-view/ProductTile";
 import { useSearchParams } from "react-router-dom";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 
 const Listing = () => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
-  const { productsList } = useSelector((state) => state.shoppingProducts);
+  const { productsList, productDetails } = useSelector(
+    (state) => state.shoppingProducts
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
+  const [openProductDetails, setOpenProductDetails] = useState(false);
 
   function createSearchParams(filterParams) {
     const queryParams = [];
@@ -31,7 +38,7 @@ const Listing = () => {
         queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
       }
     }
-    console.log("queryParams :", queryParams);
+    // console.log("queryParams :", queryParams);
 
     return queryParams.join("&");
   }
@@ -42,7 +49,7 @@ const Listing = () => {
   }
 
   function handleFilter(getSectionId, getCurrentOption) {
-    console.log(getSectionId, getCurrentOption);
+    // console.log(getSectionId, getCurrentOption);
     let cpyFilters = { ...filters };
     const indexOfCurrentSecton = Object.keys(cpyFilters).indexOf(getSectionId);
 
@@ -70,7 +77,7 @@ const Listing = () => {
   }, []);
 
   useEffect(() => {
-    console.log(searchParams);
+    // console.log(searchParams);
     if (filters && Object.keys(filters).length > 0) {
       const createQuerySting = createSearchParams(filters);
       setSearchParams(new URLSearchParams(createQuerySting));
@@ -84,8 +91,18 @@ const Listing = () => {
       );
   }, [dispatch, sort, filters]);
 
+  function handleGetProductDetails(productId) {
+    console.log(productId);
+    dispatch(fetchProductDetails(productId));
+  }
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenProductDetails(true);
+  }, [productDetails]);
+
   // console.log("fiters : ", filters);
-  console.log("searchParams : ", searchParams);
+  // console.log("searchParams : ", searchParams);
+  console.log("Prduct Details : ", productDetails);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -129,12 +146,21 @@ const Listing = () => {
           {productsList && productsList.length > 0
             ? productsList.map((product) => {
                 return (
-                  <ShoppingProductTile key={product._id} product={product} />
+                  <ShoppingProductTile
+                    key={product._id}
+                    product={product}
+                    handleGetProductDetails={handleGetProductDetails}
+                  />
                 );
               })
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={openProductDetails}
+        setOpen={setOpenProductDetails}
+        productDetails={productDetails}
+      />
     </div>
   );
 };

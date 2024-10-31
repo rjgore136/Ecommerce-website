@@ -6,6 +6,7 @@ const baseUrl = import.meta.env.VITE_baseUrl;
 const initialState = {
   isLoading: true,
   productsList: [],
+  productDetails: null,
 };
 
 export const fetchFilteredProducts = createAsyncThunk(
@@ -19,8 +20,21 @@ export const fetchFilteredProducts = createAsyncThunk(
         sortBy: sortParams,
       });
       const response = await axios.get(`${baseUrl}/shop/products/get?${query}`);
-      console.log(response.data);
+      // console.log(response.data);
 
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const fetchProductDetails = createAsyncThunk(
+  "/products/fetchProductDetails",
+  async (id) => {
+    try {
+      const response = await axios.get(`${baseUrl}/shop/products/get/${id}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -40,11 +54,26 @@ const shoppingProductSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchFilteredProducts.fulfilled, (state, action) => {
-        console.log(action);
+        // console.log(action);
         state.isLoading = false;
         state.productsList = action.payload.products;
       })
       .addCase(fetchFilteredProducts.rejected, (state, action) => {
+        console.log(action);
+
+        (state.isLoading = false), (state.productsList = []);
+      })
+      .addCase(fetchProductDetails.pending, (state, action) => {
+        // console.log(action);
+
+        state.isLoading = true;
+      })
+      .addCase(fetchProductDetails.fulfilled, (state, action) => {
+        console.log(action);
+        state.isLoading = false;
+        state.productDetails = action.payload.product[0];
+      })
+      .addCase(fetchProductDetails.rejected, (state, action) => {
         console.log(action);
 
         (state.isLoading = false), (state.productsList = []);
