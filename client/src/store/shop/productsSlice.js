@@ -34,7 +34,7 @@ export const fetchProductDetails = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(`${baseUrl}/shop/products/get/${id}`);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -69,7 +69,7 @@ const shoppingProductSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
-        console.log(action);
+        // console.log(action);
         state.isLoading = false;
         state.productDetails = action.payload.product[0];
       })

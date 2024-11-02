@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Input } from "../ui/input";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
-  console.log("productDetails:", productDetails);
+  // console.log("productDetails:", productDetails);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
