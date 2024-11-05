@@ -2,16 +2,40 @@ import { StarIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Separator } from "../ui/separator";
+import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { Label } from "../ui/label";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Input } from "../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
+import { useToast } from "@/hooks/use-toast";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   // console.log("productDetails:", productDetails);
+  const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
+  const dispatch = useDispatch();
+  function handleAddtoCart(getCurrProductId) {
+    dispatch(
+      addToCart({ productId: getCurrProductId, userId: user.id, quantity: 1 })
+    ).then((data) => {
+      // console.log(data);
+      if (data?.payload?.success) {
+        toast({
+          title: "Item added to cart",
+        });
+        dispatch(fetchCartItems(user?.id));
+      }
+    });
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
+      <DialogContent className="grid lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1 md:max-h-[90vh] md:overflow-y-auto gap-8 sm:p-14 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] sm:max-h-[90vh] lg:overflow-y-auto lg:p-4 md:p-10 sm:overflow-y-auto ">
+        <DialogTitle className="sr-only">Title</DialogTitle>
+        <DialogDescription className="sr-only">
+          This is dialog desc
+        </DialogDescription>
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={productDetails?.image}
@@ -51,7 +75,14 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             <span className="text-muted-foreground">(4.5)</span>
           </div>
           <div className="mt-5 mb-5">
-            <Button className="w-full">Add To Cart</Button>
+            <Button
+              className="w-full"
+              onClick={() => {
+                handleAddtoCart(productDetails?._id);
+              }}
+            >
+              Add To Cart
+            </Button>
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto">

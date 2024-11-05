@@ -13,8 +13,8 @@ const Filter = ({ filters, handleFilter }) => {
       <div className="p-4 space-y-4">
         {Object.keys(filterOptions).map((keyItem) => {
           return (
-            <>
-              <div key={keyItem}>
+            <React.Fragment key={keyItem}>
+              <div>
                 <h3 className="text-base font-medium">{keyItem}</h3>
                 <div className="grid gap-2 mt-2">
                   {filterOptions[keyItem].map((option) => (
@@ -38,7 +38,7 @@ const Filter = ({ filters, handleFilter }) => {
                 </div>
               </div>
               <Separator />
-            </>
+            </React.Fragment>
           );
         })}
       </div>

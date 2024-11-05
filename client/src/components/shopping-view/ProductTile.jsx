@@ -1,12 +1,13 @@
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
+
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 import { Badge } from "../ui/badge";
 
 function ShoppingProductTile({
   product,
   handleGetProductDetails,
-  //   handleAddtoCart,
+  handleAddtoCart,
 }) {
   return (
     <Card className="w-full max-w-sm mx-auto">
@@ -64,7 +65,7 @@ function ShoppingProductTile({
           </Button>
         ) : (
           <Button
-            // onClick={() => handleAddtoCart(product?._id, product?.totalStock)}
+            onClick={() => handleAddtoCart(product?._id, product?.totalStock)}
             className="w-full"
           >
             Add to cart
@@ -76,3 +77,7 @@ function ShoppingProductTile({
 }
 
 export default ShoppingProductTile;
+
+{
+  /* <DialogDescription className="sr-only">This is dialog desc</DialogDescription>; */
+}

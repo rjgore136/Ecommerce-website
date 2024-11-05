@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { shoppingViewHeaderMenuItems } from "@/config";
+import { fetchCartItems } from "@/store/shop/cartSlice";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -19,11 +20,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "@/store/auth/authSlice.js";
+import UserCartWrapper from "./cart-wrapper.jsx";
 
 const MenuItems = ({ setOpen }) => {
   return (
@@ -46,6 +48,8 @@ const MenuItems = ({ setOpen }) => {
 
 const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shoppingCart);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -53,12 +57,24 @@ const HeaderRightContent = () => {
     dispatch(logoutUser());
   }
 
+  useEffect(() => {
+    dispatch(fetchCartItems(user.id));
+  }, [dispatch]);
+
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4 sm:flex-row mt-0 sm:mt-[80%] lg:mt-0">
-      <Button variant="outline" size="icon" className="relative">
-        <ShoppingCart className="w-6 h-6" />
-        <span className="sr-only">User Cart</span>
-      </Button>
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => setOpenCartSheet(true)}
+          variant="outline"
+          size="icon"
+          className="relative"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          <span className="sr-only">User Cart</span>
+        </Button>
+        <UserCartWrapper cartItems={cartItems} />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar

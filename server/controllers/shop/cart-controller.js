@@ -83,6 +83,7 @@ export const fetchCartItems = async (req, res) => {
     }
 
     const populateCartItems = validItems.map((item) => ({
+      title: item.productId.title,
       productId: item.productId._id,
       image: item.productId.image,
       price: item.productId.price,
@@ -110,6 +111,8 @@ export const updateCartItemQty = async (req, res) => {
   try {
     const { productId, userId } = req.body;
     let quantity = Number(req.body.quantity);
+
+    console.log(productId, userId, quantity);
 
     if (!productId || !userId || quantity <= 0) {
       return res.status(400).json({
@@ -156,7 +159,7 @@ export const updateCartItemQty = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: {
+      cart: {
         ...cart._doc,
         items: populateCartItems,
       },
@@ -211,7 +214,7 @@ export const deleteCartItem = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: {
+      cart: {
         ...cart._doc,
         items: populateCartItems,
       },

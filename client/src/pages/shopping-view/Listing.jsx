@@ -19,6 +19,8 @@ import {
 import ShoppingProductTile from "@/components/shopping-view/ProductTile";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
+import { useToast } from "@/hooks/use-toast";
 
 const Listing = () => {
   const [filters, setFilters] = useState({});
@@ -26,6 +28,10 @@ const Listing = () => {
   const { productsList, productDetails } = useSelector(
     (state) => state.shoppingProducts
   );
+  const { cartItems } = useSelector((state) => state.shoppingCart);
+  const { user } = useSelector((state) => state.auth);
+
+  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const [openProductDetails, setOpenProductDetails] = useState(false);
@@ -71,6 +77,26 @@ const Listing = () => {
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   }
 
+  function handleGetProductDetails(productId) {
+    // console.log(productId);
+    dispatch(fetchProductDetails(productId));
+  }
+
+  function handleAddtoCart(getCurrProductId, totalStock) {
+    // console.log(getCurrProductId, totalStock);
+    dispatch(
+      addToCart({ productId: getCurrProductId, userId: user.id, quantity: 1 })
+    ).then((data) => {
+      // console.log(data);
+      if (data?.payload?.success) {
+        toast({
+          title: "Item added to cart",
+        });
+        dispatch(fetchCartItems(user?.id));
+      }
+    });
+  }
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
@@ -91,11 +117,6 @@ const Listing = () => {
       );
   }, [dispatch, sort, filters]);
 
-  function handleGetProductDetails(productId) {
-    console.log(productId);
-    dispatch(fetchProductDetails(productId));
-  }
-
   useEffect(() => {
     if (productDetails !== null) setOpenProductDetails(true);
   }, [productDetails]);
@@ -103,6 +124,7 @@ const Listing = () => {
   // console.log("fiters : ", filters);
   // console.log("searchParams : ", searchParams);
   // console.log("Prduct Details : ", productDetails);
+  // console.log("cartItems:", cartItems);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -150,6 +172,7 @@ const Listing = () => {
                     key={product._id}
                     product={product}
                     handleGetProductDetails={handleGetProductDetails}
+                    handleAddtoCart={handleAddtoCart}
                   />
                 );
               })
