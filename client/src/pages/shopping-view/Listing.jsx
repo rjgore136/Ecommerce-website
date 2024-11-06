@@ -77,11 +77,13 @@ const Listing = () => {
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   }
 
+  //get productDetails
   function handleGetProductDetails(productId) {
     // console.log(productId);
     dispatch(fetchProductDetails(productId));
   }
 
+  //add to cart
   function handleAddtoCart(getCurrProductId, totalStock) {
     // console.log(getCurrProductId, totalStock);
     dispatch(
@@ -97,11 +99,13 @@ const Listing = () => {
     });
   }
 
+  //set sort and set filters
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, []);
 
+  //set search params
   useEffect(() => {
     // console.log(searchParams);
     if (filters && Object.keys(filters).length > 0) {
@@ -110,6 +114,7 @@ const Listing = () => {
     }
   }, [filters]);
 
+  //fetch filtered products
   useEffect(() => {
     if (filters !== null && sort !== null)
       dispatch(
@@ -117,6 +122,7 @@ const Listing = () => {
       );
   }, [dispatch, sort, filters]);
 
+  //setOpenPruductDetails(true) on basis of productDetails !== null
   useEffect(() => {
     if (productDetails !== null) setOpenProductDetails(true);
   }, [productDetails]);

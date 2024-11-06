@@ -12,6 +12,7 @@ import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { shoppingViewHeaderMenuItems } from "@/config";
 import { fetchCartItems } from "@/store/shop/cartSlice";
+import { Label } from "../ui/label";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -28,19 +29,33 @@ import { logoutUser } from "@/store/auth/authSlice.js";
 import UserCartWrapper from "./cart-wrapper.jsx";
 
 const MenuItems = ({ setOpen }) => {
+  const navigate = useNavigate();
+
+  //get products by header options
+  function handleNavigateToListingPage(currentItem) {
+    console.log(currentItem.id);
+
+    if (currentItem.id === "products") {
+      return navigate(currentItem.path);
+    }
+    sessionStorage.removeItem("filters");
+    const currFilters =
+      currentItem.id !== "home" ? { category: [currentItem.id] } : null;
+    sessionStorage.setItem("filters", JSON.stringify(currFilters));
+    navigate(currentItem.path);
+  }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row sm:mt-5 sm:ml-7">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
-          // onClick={() => {
-          //   setOpen ? setOpen(false) : null;
-          // }}
+        <Label
+          onClick={() => {
+            handleNavigateToListingPage(menuItem);
+          }}
           className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
-          to={menuItem.path}
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );

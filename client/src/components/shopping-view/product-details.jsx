@@ -9,12 +9,15 @@ import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 import { useToast } from "@/hooks/use-toast";
+import { setProductDetails } from "@/store/shop/productsSlice";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   // console.log("productDetails:", productDetails);
   const { user } = useSelector((state) => state.auth);
   const { toast } = useToast();
   const dispatch = useDispatch();
+
+  //handle add to cart
   function handleAddtoCart(getCurrProductId) {
     dispatch(
       addToCart({ productId: getCurrProductId, userId: user.id, quantity: 1 })
@@ -29,8 +32,14 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
     });
   }
 
+  //handleDialogClose
+  function handleDialogClose() {
+    setOpen(false);
+    dispatch(setProductDetails());
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="grid lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1 md:max-h-[90vh] md:overflow-y-auto gap-8 sm:p-14 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] sm:max-h-[90vh] lg:overflow-y-auto lg:p-4 md:p-10 sm:overflow-y-auto ">
         <DialogTitle className="sr-only">Title</DialogTitle>
         <DialogDescription className="sr-only">

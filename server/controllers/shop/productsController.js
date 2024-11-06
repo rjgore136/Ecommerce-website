@@ -61,7 +61,7 @@ export const getProductDetails = async (req, res) => {
       product: product,
     });
   } catch (error) {
-    console.log(e);
+    console.log(error);
     res.json({
       success: false,
       message: "Failed to fetch the product details!!",
