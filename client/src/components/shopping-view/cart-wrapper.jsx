@@ -4,10 +4,12 @@ import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import UserCartItemsContent from "./cart-items-content";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
+import { useNavigate } from "react-router-dom";
 
 const UserCartWrapper = ({ cartItems }) => {
   const { user } = useSelector((state) => state.auth);
   // const { cartItems } = useSelector((state) => state.shoppingCart);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // console.log("cartitems: ", cartItems);
@@ -47,7 +49,12 @@ const UserCartWrapper = ({ cartItems }) => {
           <span className="font-bold">Total</span>
           <span className="font-bold">₹{totalCartAmt}</span>
         </div>
-        <Button className="w-full mt-6">Proceed to Checkout</Button>
+        <Button
+          className="w-full mt-6"
+          onClick={() => navigate("/shop/checkout")}
+        >
+          Proceed to Checkout
+        </Button>
       </div>
     </SheetContent>
   );

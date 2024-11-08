@@ -7,6 +7,7 @@ import authRouter from "./routes/auth/auth-route.js";
 import adminProductsRouter from "./routes/admin/products-routes.js";
 import shoppingProductsRouter from "./routes/shop/product-routes.js";
 import cartRouter from "./routes/shop/cart-routes.js";
+import addressRouter from "./routes/shop/address-routes.js";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shoppingProductsRouter);
 app.use("/api/shop/cart", cartRouter);
+app.use("/api/shop/address", addressRouter);
 
 app.listen(port, (req, res) => {
   console.log(`The server is running on http://localhost:${port}`);

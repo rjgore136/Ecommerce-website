@@ -36,7 +36,7 @@ const App = () => {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<AuthLogin />} />
 
         {/* auth */}
         <Route

@@ -110,7 +110,7 @@ const ShopHome = () => {
     if (productDetails !== null) setOpenProductDetails(true);
   }, [productDetails]);
 
-  console.log("ProductList:", productsList);
+  // console.log("ProductList:", productsList);
 
   return (
     <div className="flex flex-col min-h-sreen">
