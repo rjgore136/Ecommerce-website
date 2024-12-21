@@ -119,6 +119,7 @@ const Address = () => {
         {addressList && addressList.length > 0
           ? addressList.map((singleAddress) => (
               <AddressCard
+                key={singleAddress._id}
                 addressInfo={singleAddress}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEditAddress={handleEditAddress}

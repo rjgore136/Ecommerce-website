@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_baseUrl;
+
 const initialState = {
   isLoading: false,
   cartItems: [],
@@ -112,7 +113,7 @@ const shoppingCartSlice = createSlice({
         state.cartItems = action.payload.cart;
       })
       .addCase(fetchCartItems.rejected, (state) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = false;
         state.cartItems = [];
@@ -128,7 +129,7 @@ const shoppingCartSlice = createSlice({
         state.cartItems = action.payload.cart;
       })
       .addCase(updateCartItemQty.rejected, (state, action) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = false;
         state.cartItems = [];
@@ -144,7 +145,7 @@ const shoppingCartSlice = createSlice({
         state.cartItems = action.payload.cart;
       })
       .addCase(deleteCartItem.rejected, (state, action) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = false;
         state.cartItems = [];

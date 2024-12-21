@@ -64,6 +64,8 @@ const MenuItems = ({ setOpen }) => {
 const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shoppingCart);
+  // console.log(cartItems);
+
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -88,7 +90,10 @@ const HeaderRightContent = () => {
           <ShoppingCart className="w-6 h-6" />
           <span className="sr-only">User Cart</span>
         </Button>
-        <UserCartWrapper cartItems={cartItems} />
+        <UserCartWrapper
+          cartItems={cartItems}
+          setOpenCartSheet={setOpenCartSheet}
+        />
       </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

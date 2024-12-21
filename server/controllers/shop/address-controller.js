@@ -64,7 +64,7 @@ export const editAddress = async (req, res) => {
   try {
     const { userId, addressId } = req.params;
     const formData = req.body;
-    console.log(formData);
+    // console.log(formData);
 
     if (!userId || !addressId) {
       return res.status(400).json({

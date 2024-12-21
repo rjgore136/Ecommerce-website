@@ -6,7 +6,7 @@ import UserCartItemsContent from "./cart-items-content";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { useNavigate } from "react-router-dom";
 
-const UserCartWrapper = ({ cartItems }) => {
+const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
   const { user } = useSelector((state) => state.auth);
   // const { cartItems } = useSelector((state) => state.shoppingCart);
   const navigate = useNavigate();
@@ -51,7 +51,10 @@ const UserCartWrapper = ({ cartItems }) => {
         </div>
         <Button
           className="w-full mt-6"
-          onClick={() => navigate("/shop/checkout")}
+          onClick={() => {
+            navigate("/shop/checkout");
+            setOpenCartSheet(false);
+          }}
         >
           Proceed to Checkout
         </Button>

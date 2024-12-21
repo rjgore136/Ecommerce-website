@@ -11,7 +11,7 @@ import {
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
-import ShopOrdersDetailsView from "./order-details";
+import AdminOrdersDetailsView from "./order-details";
 
 const Orders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
@@ -59,7 +59,7 @@ const Orders = () => {
                   <DialogTrigger>
                     <Button>View Details</Button>
                   </DialogTrigger>
-                  <ShopOrdersDetailsView />
+                  <AdminOrdersDetailsView />
                 </Dialog>
               </TableCell>
             </TableRow>
