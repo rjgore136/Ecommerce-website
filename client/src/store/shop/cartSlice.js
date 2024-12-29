@@ -97,7 +97,7 @@ const shoppingCartSlice = createSlice({
         state.cartItems = action.payload.cart;
       })
       .addCase(addToCart.rejected, (state, action) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = false;
         state.cartItems = [];

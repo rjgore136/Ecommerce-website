@@ -13,7 +13,7 @@ const store = configureStore({
     shoppingProducts: shoppingProductsReducer,
     shoppingCart: shoppingCartReducer,
     address: addressReducer,
-    shoeOrder: shopOrderReducer,
+    shopOrder: shopOrderReducer,
   },
 });
 

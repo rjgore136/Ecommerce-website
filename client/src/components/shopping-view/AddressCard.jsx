@@ -6,21 +6,21 @@ const AddressCard = ({
   addressInfo,
   handleDeleteAddress,
   handleEditAddress,
-  //   setCurrentSelectedAddress,
+  setCurrSelectedAddress,
   //   selectedId,
 }) => {
   return (
     <Card
-    //   onClick={
-    //     setCurrentSelectedAddress
-    //       ? () => setCurrentSelectedAddress(addressInfo)
-    //       : null
-    //   }
-    //   className={`cursor-pointer border-red-700 ${
-    //     selectedId?._id === addressInfo?._id
-    //       ? "border-red-900 border-[4px]"
-    //       : "border-black"
-    //   }`}
+      onClick={
+        setCurrSelectedAddress
+          ? () => setCurrSelectedAddress(addressInfo)
+          : null
+      }
+      //   className={`cursor-pointer border-red-700 ${
+      //     selectedId?._id === addressInfo?._id
+      //       ? "border-red-900 border-[4px]"
+      //       : "border-black"
+      //   }`}
     >
       <CardContent className="grid p-4 gap-4">
         <Label>Address: {addressInfo?.address}</Label>

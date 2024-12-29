@@ -21,7 +21,7 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const Address = () => {
+const Address = ({ setCurrSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const { user } = useSelector((state) => state.auth);
@@ -123,6 +123,7 @@ const Address = () => {
                 addressInfo={singleAddress}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEditAddress={handleEditAddress}
+                setCurrSelectedAddress={setCurrSelectedAddress}
               />
             ))
           : null}
