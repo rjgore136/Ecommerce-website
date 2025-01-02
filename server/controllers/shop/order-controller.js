@@ -6,6 +6,7 @@ export const createOrder = async (req, res) => {
   try {
     const {
       userId,
+      userName,
       cartItems,
       addressInfo,
       orderStatus,
@@ -19,6 +20,8 @@ export const createOrder = async (req, res) => {
       cartId,
     } = req.body;
     // console.log(paypal);
+
+    console.log(cartItems);
 
     const create_payment_json = {
       intent: "sale",
@@ -60,6 +63,7 @@ export const createOrder = async (req, res) => {
       } else {
         const newlyCreatedOrder = new Order({
           userId,
+          userName,
           cartId,
           cartItems,
           addressInfo,
@@ -73,7 +77,9 @@ export const createOrder = async (req, res) => {
           payerId,
         });
 
-        await newlyCreatedOrder.save();
+        const newOrder = await newlyCreatedOrder.save();
+        console.log("newOrder ", newOrder);
+
         // console.log(paymentInfo);
 
         const approvalURL = paymentInfo.links.find(

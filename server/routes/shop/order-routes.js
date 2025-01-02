@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post("/create", createOrder);
 router.post("/capture", capturePayment);
-router.post("/list-orders/:userId", getAllOrdersByUserId);
-router.post("/order-details/:orderId", getOrderDetailsByOrderId);
+router.get("/list-orders/:userId", getAllOrdersByUserId);
+router.get("/order-details/:orderId", getOrderDetailsByOrderId);
 
 export default router;

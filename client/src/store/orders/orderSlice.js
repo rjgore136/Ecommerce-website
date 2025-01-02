@@ -7,6 +7,8 @@ const initialState = {
   approvalURL: "",
   isLoading: false,
   orderId: null,
+  orderList: [],
+  orderDetails: null,
 };
 
 //create new order
@@ -48,7 +50,7 @@ export const getAllOrders = createAsyncThunk(
   "/order/getAllOrders",
   async (userId) => {
     console.log("getAllOrders");
-    const response = await axios.post(
+    const response = await axios.get(
       `${baseUrl}/shop/order/list-orders/${userId}`
     );
 
@@ -61,7 +63,7 @@ export const getAllOrders = createAsyncThunk(
 export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (orderId) => {
-    const response = await axios.post(
+    const response = await axios.get(
       `${baseUrl}/shop/order/order-details/${orderId}`
     );
 
@@ -73,7 +75,13 @@ export const getOrderDetails = createAsyncThunk(
 const shoppingOrderSlice = createSlice({
   name: "shoppingOrderSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderDetails: (state) => {
+      console.log("resetOrderDetails");
+
+      state.orderDetails = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewOrder.pending, (state) => {
@@ -100,8 +108,31 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(capturePayment.fulfilled, (state, action) => {
         console.log(action);
+      })
+      .addCase(getAllOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderList = action?.payload?.data;
+      })
+      .addCase(getAllOrders.rejected, (state) => {
+        (state.isLoading = false), (state.orderList = []);
+      })
+      .addCase(getOrderDetails.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrderDetails.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderDetails = action.payload.data;
+      })
+      .addCase(getOrderDetails.rejected, (state) => {
+        state.isLoading = false;
+        state.orderDetails = null;
       });
   },
 });
+
+export const { resetOrderDetails } = shoppingOrderSlice.actions;
 
 export default shoppingOrderSlice.reducer;

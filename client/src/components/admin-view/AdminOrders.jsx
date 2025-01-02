@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Dialog } from "../ui/dialog";
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "../ui/table";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import AdminOrderDetailsView from "./order-details";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  resetOrderDetails,
+} from "../../store/admin/orderSlice.js";
+import { Badge } from "../ui/badge";
 
-import AdminOrdersDetailsView from "./order-details";
-
-const Orders = () => {
+function AdminOrders() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
+  const dispatch = useDispatch();
+
+  function handleFetchOrderDetails(getId) {
+    dispatch(getOrderDetailsForAdmin(getId));
+  }
 
   useEffect(() => {
-    return () => {
-      console.log(openDetailsDialog);
-    };
-  }, [openDetailsDialog]);
+    dispatch(getAllOrdersForAdmin());
+  }, [dispatch]);
 
-  function fix() {
-    console.log("Working...");
-    setOpenDetailsDialog(true);
-  }
+  console.log(orderDetails, "OrderDetails");
+
+  useEffect(() => {
+    if (orderDetails !== null) setOpenDetailsDialog(true);
+  }, [orderDetails]);
 
   return (
     <Card>
-      <CardHeader>Order History</CardHeader>
+      <CardHeader>
+        <CardTitle>All Orders</CardTitle>
+      </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
@@ -44,30 +57,53 @@ const Orders = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>123</TableCell>
-              <TableCell>9/11/2024</TableCell>
-              <TableCell>In process</TableCell>
-              <TableCell>₹3000</TableCell>
-              <TableCell>
-                <Dialog
-                // open={openDetailsDialog}
-                // onOpenChange={() => {
-                //   setOpenDetailsDialog(false);
-                // }}
-                >
-                  <DialogTrigger>
-                    <Button>View Details</Button>
-                  </DialogTrigger>
-                  <AdminOrdersDetailsView />
-                </Dialog>
-              </TableCell>
-            </TableRow>
+            {orderList && orderList.length > 0
+              ? orderList.map((orderItem) => (
+                  <TableRow key={orderItem._id}>
+                    <TableCell>{orderItem?._id}</TableCell>
+                    <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`py-1 px-3 ${
+                          orderItem?.orderStatus === "confirmed"
+                            ? "bg-green-500"
+                            : orderItem?.orderStatus === "rejected"
+                            ? "bg-red-600"
+                            : "bg-black"
+                        }`}
+                      >
+                        {orderItem?.orderStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>${orderItem?.totalAmount}</TableCell>
+                    <TableCell>
+                      <Dialog
+                        open={openDetailsDialog}
+                        onOpenChange={() => {
+                          setOpenDetailsDialog(false);
+                          dispatch(resetOrderDetails());
+                        }}
+                      >
+                        <Button
+                          onClick={() =>
+                            handleFetchOrderDetails(orderItem?._id)
+                          }
+                        >
+                          View Details
+                        </Button>
+                        {openDetailsDialog && orderDetails && (
+                          <AdminOrderDetailsView orderDetails={orderDetails} />
+                        )}
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : null}
           </TableBody>
         </Table>
       </CardContent>
     </Card>
   );
-};
+}
 
-export default Orders;
+export default AdminOrders;

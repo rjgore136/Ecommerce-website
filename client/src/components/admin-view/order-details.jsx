@@ -1,57 +1,107 @@
-import React from "react";
-import { DialogContent, DialogTitle, DialogDescription } from "../ui/dialog";
-import { Label } from "../ui/label";
-import { Separator } from "../ui/separator";
 import { useState } from "react";
 import CommonForm from "../common/Form";
+import { DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  updateOrderStatus,
+} from "@/store/admin/orderSlice";
+import { useToast } from "@/hooks/use-toast";
 
 const initialFormData = {
   status: "",
 };
 
-const AdminOrdersDetailsView = () => {
+function AdminOrderDetailsView({ orderDetails }) {
   const [formData, setFormData] = useState(initialFormData);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
 
-  function handleUpdateStatus(e) {
-    e.preventDefault();
+  console.log(orderDetails, "orderDetailsorderDetails");
+
+  function handleUpdateStatus(event) {
+    event.preventDefault();
+    const { status } = formData;
+    console.log("formData", formData);
+
+    dispatch(
+      updateOrderStatus({ orderId: orderDetails?._id, updateStatus: status })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getOrderDetailsForAdmin(orderDetails?._id));
+        dispatch(getAllOrdersForAdmin());
+        setFormData(initialFormData);
+        toast({
+          title: data?.payload?.message,
+        });
+      }
+    });
   }
 
   return (
-    <DialogContent className="sm:max-w-[600px]">
+    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-auto">
       <DialogTitle style={{ display: "none" }}>Hidden Title</DialogTitle>
       <DialogDescription className="sr-only">
         This is dialog desc
       </DialogDescription>
-      <div className="grid gap-6">
+      <div className="grid gap-6 overflow-auto">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
             <p className="font-medium">Order ID</p>
-            <Label>12345</Label>
+            <Label>{orderDetails?._id}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Date</p>
-            <Label>20/12/2024</Label>
+            <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Price</p>
-            <Label>₹3000</Label>
+            <Label>${orderDetails?.totalAmount}</Label>
+          </div>
+          <div className="flex mt-2 items-center justify-between">
+            <p className="font-medium">Payment method</p>
+            <Label>{orderDetails?.paymentMethod}</Label>
+          </div>
+          <div className="flex mt-2 items-center justify-between">
+            <p className="font-medium">Payment Status</p>
+            <Label>{orderDetails?.paymentStatus}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Status</p>
-            <Label>In Process</Label>
+            <Label>
+              <Badge
+                className={`py-1 px-3 ${
+                  orderDetails?.orderStatus === "confirmed"
+                    ? "bg-green-500"
+                    : orderDetails?.orderStatus === "rejected"
+                    ? "bg-red-600"
+                    : "bg-black"
+                }`}
+              >
+                {orderDetails?.orderStatus}
+              </Badge>
+            </Label>
           </div>
         </div>
-
         <Separator />
-        <div className="grid gap-4">
+        <div className="grid gap-4 overflow-auto">
           <div className="grid gap-2">
             <div className="font-medium">Order Details</div>
             <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span>Title: Title</span>
-                <span>Quantity: 4</span>
-                <span>Price:₹1500 </span>
-              </li>
+              {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
+                ? orderDetails?.cartItems.map((item) => (
+                    <li className="flex items-center justify-between">
+                      <span>Title: {item.title}</span>
+                      <span>Quantity: {item.quantity}</span>
+                      <span>Price: ${item.price}</span>
+                    </li>
+                  ))
+                : null}
             </ul>
           </div>
         </div>
@@ -59,12 +109,12 @@ const AdminOrdersDetailsView = () => {
           <div className="grid gap-2">
             <div className="font-medium">Shipping Info</div>
             <div className="grid gap-0.5 text-muted-foreground">
-              <span>userName</span>
-              <span>address</span>
-              <span>city</span>
-              <span>pincode</span>
-              <span>phone</span>
-              <span>notes</span>
+              <span>{orderDetails.userName}</span>
+              <span>{orderDetails?.addressInfo?.address}</span>
+              <span>{orderDetails?.addressInfo?.city}</span>
+              <span>{orderDetails?.addressInfo?.pincode}</span>
+              <span>{orderDetails?.addressInfo?.phone}</span>
+              <span>{orderDetails?.addressInfo?.notes}</span>
             </div>
           </div>
         </div>
@@ -78,8 +128,8 @@ const AdminOrdersDetailsView = () => {
                 componentType: "select",
                 options: [
                   { id: "pending", label: "Pending" },
-                  { id: "in process", label: "In Process" },
-                  { id: "in shipping", label: "In Shipping" },
+                  { id: "inProcess", label: "In Process" },
+                  { id: "inShipping", label: "In Shipping" },
                   { id: "delivered", label: "Delivered" },
                   { id: "rejected", label: "Rejected" },
                 ],
@@ -89,11 +139,11 @@ const AdminOrdersDetailsView = () => {
             setFormData={setFormData}
             buttonText={"Update Order Status"}
             onSubmit={handleUpdateStatus}
-          ></CommonForm>
+          />
         </div>
       </div>
     </DialogContent>
   );
-};
+}
 
-export default AdminOrdersDetailsView;
+export default AdminOrderDetailsView;
