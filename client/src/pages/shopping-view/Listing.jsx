@@ -36,6 +36,8 @@ const Listing = () => {
   const dispatch = useDispatch();
   const [openProductDetails, setOpenProductDetails] = useState(false);
 
+  const categoryParams = searchParams.get("category");
+
   function createSearchParams(filterParams) {
     const queryParams = [];
     for (const [key, value] of Object.entries(filterParams)) {
@@ -103,7 +105,7 @@ const Listing = () => {
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
-  }, []);
+  }, [categoryParams]);
 
   //set search params
   useEffect(() => {

@@ -103,7 +103,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 </Avatar>
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Mauli Palke</h3>
+                    <h3 className="font-bold">Roshan Arora</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-primary" />
@@ -125,7 +125,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 </Avatar>
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Mauli Palke</h3>
+                    <h3 className="font-bold">Roshan Arora</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-primary" />
@@ -147,7 +147,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 </Avatar>
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Mauli Palke</h3>
+                    <h3 className="font-bold">Roshan Arora</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-primary" />
@@ -169,7 +169,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 </Avatar>
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Mauli Palke</h3>
+                    <h3 className="font-bold">Roshan Arora</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-primary" />

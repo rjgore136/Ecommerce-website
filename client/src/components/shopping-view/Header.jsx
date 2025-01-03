@@ -7,7 +7,12 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { shoppingViewHeaderMenuItems } from "@/config";
@@ -30,19 +35,25 @@ import UserCartWrapper from "./cart-wrapper.jsx";
 
 const MenuItems = ({ setOpen }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   //get products by header options
   function handleNavigateToListingPage(currentItem) {
     console.log(currentItem.id);
 
-    if (currentItem.id === "products") {
-      return navigate(currentItem.path);
-    }
     sessionStorage.removeItem("filters");
     const currFilters =
-      currentItem.id !== "home" ? { category: [currentItem.id] } : null;
+      currentItem.id !== "home" && currentItem.id !== "products"
+        ? { category: [currentItem.id] }
+        : null;
+
+    console.log(currFilters);
+
     sessionStorage.setItem("filters", JSON.stringify(currFilters));
-    navigate(currentItem.path);
+    location.pathname.includes("listing") && currFilters !== null
+      ? setSearchParams(new URLSearchParams(`?category=${currentItem.id}`))
+      : navigate(currentItem.path);
   }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row sm:mt-5 sm:ml-7">
