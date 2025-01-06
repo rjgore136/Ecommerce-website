@@ -7,11 +7,50 @@ import { useToast } from "@/hooks/use-toast";
 
 const UserCartItemsContent = ({ item }) => {
   // console.log(item);
+  const { cartItems } = useSelector((state) => state.shoppingCart);
+  const { productsList } = useSelector((state) => state.shoppingProducts);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { toast } = useToast();
 
   function handleUpdateQty(item, type) {
+    // console.log("item", item);
+    // console.log("productsList", productsList);
+
+    if (type === "Plus") {
+      let getCartItems = cartItems.items || [];
+
+      if (getCartItems.length) {
+        const indexOfCurrentCartItem = getCartItems.findIndex(
+          (cartItem) => cartItem.productId === item?.productId
+        );
+        // console.log(indexOfCurrentCartItem);
+
+        const getCurrentProductIndex = productsList.findIndex(
+          (product) => product._id === item?.productId
+        );
+        // console.log(getCurrentProductIndex);
+
+        const getTotalStock = productsList[getCurrentProductIndex].totalStock;
+
+        // console.log(getCurrentProductIndex, getTotalStock, "getTotalStock");
+
+        if (indexOfCurrentCartItem > -1) {
+          const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
+          // console.log("getQuantity", getQuantity);
+
+          if (getQuantity + 1 > getTotalStock) {
+            toast({
+              title: `Only ${getQuantity} quantity can be added for this item`,
+              variant: "destructive",
+            });
+
+            return;
+          }
+        }
+      }
+    }
+
     dispatch(
       updateCartItemQty({
         productId: item.productId,
