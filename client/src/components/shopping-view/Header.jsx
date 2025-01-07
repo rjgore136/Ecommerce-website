@@ -44,7 +44,9 @@ const MenuItems = ({ setOpen }) => {
 
     sessionStorage.removeItem("filters");
     const currFilters =
-      currentItem.id !== "home" && currentItem.id !== "products"
+      currentItem.id !== "home" &&
+      currentItem.id !== "products" &&
+      currentItem.id !== "search"
         ? { category: [currentItem.id] }
         : null;
 
