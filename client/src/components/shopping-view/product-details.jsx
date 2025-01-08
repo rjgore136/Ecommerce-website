@@ -10,13 +10,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 import { useToast } from "@/hooks/use-toast";
 import { setProductDetails } from "@/store/shop/productsSlice";
+import StarRating from "../common/StarRating";
+import { useEffect, useState } from "react";
+import { addReview, getAllReviews } from "@/store/shop/reviewSlice";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   // console.log("productDetails:", productDetails);
+  const [reviewMsg, setReviewMsg] = useState("");
+  const [rating, setRating] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shoppingCart);
+  const { reviews } = useSelector((state) => state.reviews);
   const { toast } = useToast();
   const dispatch = useDispatch();
+
+  // console.log(user);
 
   //handle add to cart
   function handleAddtoCart(getCurrProductId, getTotalStock) {
@@ -52,11 +60,52 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
     });
   }
 
+  //add review
+  function handleAddReview() {
+    console.log("handlwReview");
+
+    dispatch(
+      addReview({
+        productId: productDetails._id,
+        userId: user.id,
+        userName: user.userName,
+        reviewMessage: reviewMsg,
+        reviewValue: rating,
+      })
+    ).then((data) => {
+      console.log(data);
+      if (data?.payload?.success) {
+        dispatch(getAllReviews(productDetails._id));
+        toast({
+          title: "Reviewed successfully",
+        });
+      } else {
+        toast({
+          title: "Failed to review due to some error!!",
+          variant: "destructive",
+        });
+      }
+    });
+  }
+
+  //get rating
+  function handleRatingChange(getRating) {
+    setRating(getRating);
+  }
+
   //handleDialogClose
   function handleDialogClose() {
     setOpen(false);
     dispatch(setProductDetails());
+    setRating("");
+    setReviewMsg("");
   }
+
+  useEffect(() => {
+    if (productDetails !== null) dispatch(getAllReviews(productDetails?._id));
+  }, [productDetails]);
+  console.log("Reviews", reviews);
+  console.log(productDetails);
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
@@ -85,7 +134,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 productDetails?.salePrice > 0 ? "line-through" : ""
               }`}
             >
-              ₹{productDetails?.price}
+              ${productDetails?.price}
             </p>
             {productDetails?.salePrice > 0 ? (
               <p className="text-2xl font-bold text-muted-foreground">
@@ -95,13 +144,14 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           </div>
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-center gap-0.5">
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
+              <StarRating
+                rating={productDetails?.averageReview}
+                // handleRatingChange={handleRatingChange}
+              />
             </div>
-            <span className="text-muted-foreground">(4.5)</span>
+            <span className="text-muted-foreground">
+              ({productDetails?.averageReview})
+            </span>
           </div>
           <div className="mt-5 mb-5">
             {productDetails?.totalStock === 0 ? (
@@ -126,110 +176,51 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
             <div className="grid gap-6">
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>MP</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Roshan Arora</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                  </div>
-                  <p className="text-muted-foreground">
-                    This is an awsome product.
-                  </p>
-                </div>
-              </div>
+              {reviews && reviews.length ? (
+                reviews.map((review) => {
+                  return (
+                    <div className="flex gap-4">
+                      <Avatar className="w-10 h-10 border">
+                        <AvatarFallback>
+                          {review.userName[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="grid gap-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold">{review.userName}</h3>
+                        </div>
+                        <div className="flex items-center gap-0.5">
+                          <StarRating rating={review.reviewValue} />
+                        </div>
+                        <p className="text-muted-foreground">
+                          {review.reviewMessage}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <h1>Be the first to review!</h1>
+              )}
             </div>
-            <div className="grid gap-6">
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>MP</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Roshan Arora</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                  </div>
-                  <p className="text-muted-foreground">
-                    This is an awsome product.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="grid gap-6">
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>MP</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Roshan Arora</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                  </div>
-                  <p className="text-muted-foreground">
-                    This is an awsome product.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="grid gap-6">
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>MP</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Roshan Arora</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                  </div>
-                  <p className="text-muted-foreground">
-                    This is an awsome product.
-                  </p>
-                </div>
-              </div>
-            </div>
+
             <div className="mt-10 flex-col flex gap-2">
-              {/* <Label>Write a review</Label>
+              <Label>Write a review</Label>
               <div className="flex gap-1">
-                <StarRatingComponent
+                <StarRating
                   rating={rating}
                   handleRatingChange={handleRatingChange}
                 />
-              </div> */}
+              </div>
               <Input
-                // name="reviewMsg"
-                // value={reviewMsg}
-                // onChange={(event) => setReviewMsg(event.target.value)}
+                name="reviewMsg"
+                value={reviewMsg}
+                onChange={(event) => setReviewMsg(event.target.value)}
                 placeholder="Write a review..."
               />
               <Button
-              // onClick={handleAddReview}
-              // disabled={reviewMsg.trim() === ""}
+                onClick={handleAddReview}
+                disabled={reviewMsg.trim() === ""}
               >
                 Submit
               </Button>

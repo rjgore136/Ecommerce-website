@@ -7,6 +7,8 @@ export const addReview = async (req, res) => {
     const { productId, userId, userName, reviewMessage, reviewValue } =
       req.body;
 
+    console.log(productId, userId, userName, reviewMessage, reviewValue);
+
     //finding the order of user with userId to make sure that he has bought this product to review it
     //we used dot notation to access nested documents of order model
     const order = await Order.findOne({
@@ -43,12 +45,16 @@ export const addReview = async (req, res) => {
     await newReview.save();
 
     const reviews = await Review.find({ productId });
-    const averageReviews = reviews.length
-      ? reviews.reduce((sum, review) => sum + review, 0) / reviews.length
-      : 0;
+    const averageReview =
+      reviews.length > 0
+        ? reviews.reduce((sum, review) => sum + review.reviewValue, 0) /
+          reviews.length
+        : 0;
 
-    await Product.findByIdAndDelete(productId, {
-      averageReview: averageReviews,
+    console.log(averageReview);
+
+    await Product.findByIdAndUpdate(productId, {
+      averageReview,
     });
 
     res.status(201).json({
@@ -64,6 +70,7 @@ export const addReview = async (req, res) => {
   }
 };
 
+//get all the reviews of particular product
 export const getAllReviews = async (req, res) => {
   try {
     const { productId } = req.params;

@@ -15,8 +15,8 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
   // console.log("cartitems: ", cartItems);
 
   const totalCartAmt =
-    cartItems.items && cartItems.items.length > 0
-      ? cartItems.items.reduce((sum, item) => {
+    cartItems?.items && cartItems?.items.length > 0
+      ? cartItems?.items.reduce((sum, item) => {
           return (
             sum +
             (item.salePrice > 0 ? item.salePrice : item.price) * item.quantity
