@@ -11,6 +11,7 @@ import addressRouter from "./routes/shop/address-routes.js";
 import shopOrderRouter from "./routes/shop/order-routes.js";
 import adminOrderRouter from "./routes/admin/order-routes.js";
 import shopSearchRouter from "./routes/shop/searchRoutes.js";
+import reviewsRouter from "./routes/shop/reviews-routes.js";
 
 dotenv.config();
 
@@ -50,6 +51,7 @@ app.use("/api/shop/address", addressRouter);
 app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/admin/order", adminOrderRouter);
 app.use("/api/shop/search", shopSearchRouter);
+app.use("/api/shop/reviews", reviewsRouter);
 
 app.listen(port, (req, res) => {
   console.log(`The server is running on http://localhost:${port}`);
