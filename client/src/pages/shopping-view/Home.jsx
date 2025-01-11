@@ -30,6 +30,7 @@ import { fetchCartItems } from "@/store/shop/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { getFeatureImages } from "@/store/common/featureSlice";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -49,7 +50,8 @@ const brandsWithIcon = [
 ];
 
 const ShopHome = () => {
-  const slides = [banner1, banner2, banner3];
+  // const slides = [banner1, banner2, banner3];
+  const { featureImages } = useSelector((state) => state.feature);
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
   const { productsList, productDetails } = useSelector(
@@ -62,11 +64,13 @@ const ShopHome = () => {
 
   // automatic slide change
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 7000);
-    return () => clearInterval(timer);
-  }, []);
+    if (featureImages && featureImages.length > 0) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImages.length);
+      }, 7000);
+      return () => clearInterval(timer);
+    }
+  }, [featureImages]); // Add featureImages as a dependency
 
   //filter using category and redirect to listing page
   function handleNavigateToListingPage(currentItem, section) {
@@ -110,30 +114,38 @@ const ShopHome = () => {
     if (productDetails !== null) setOpenProductDetails(true);
   }, [productDetails]);
 
+  //fetch feature images
+  useEffect(() => {
+    dispatch(getFeatureImages());
+  }, [dispatch]);
+
   // console.log("ProductList:", productsList);
 
   return (
     <div className="flex flex-col min-h-sreen">
       <div className="relative w-full h-[600px] overflow-hidden">
-        {slides.map((slide, index) => {
-          return (
-            <img
-              src={slide}
-              key={index}
-              className={`${
-                index === currentSlide ? "opacity-100" : "opacity-0"
-              } absolute top-0 left-0 w-full h-full object-cover
+        {featureImages && featureImages.length > 0
+          ? featureImages.map((slide, index) => {
+              return (
+                <img
+                  src={slide?.image}
+                  key={index}
+                  className={`${
+                    index === currentSlide ? "opacity-100" : "opacity-0"
+                  } absolute top-0 left-0 w-full h-full object-cover
               transition-opacity duration-1000`}
-            />
-          );
-        })}
+                />
+              );
+            })
+          : null}
         <Button
           variant="outline"
           size="icon"
           className={`absolute top-1/2 left-4 transform-y-1/2 bg-white/80`}
           onClick={() => {
             setCurrentSlide(
-              (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
+              (prevSlide) =>
+                (prevSlide - 1 + featureImages.length) % featureImages.length
             );
           }}
         >
@@ -144,7 +156,9 @@ const ShopHome = () => {
           size="icon"
           className={`absolute top-1/2 right-4 transform-y-1/2 bg-white/80`}
           onClick={() => {
-            setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+            setCurrentSlide(
+              (prevSlide) => (prevSlide + 1) % featureImages.length
+            );
           }}
         >
           <ChevronRightIcon className="w-4 h-4" />

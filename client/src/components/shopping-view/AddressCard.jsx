@@ -7,7 +7,7 @@ const AddressCard = ({
   handleDeleteAddress,
   handleEditAddress,
   setCurrSelectedAddress,
-  //   selectedId,
+  selectedId,
 }) => {
   return (
     <Card
@@ -16,11 +16,11 @@ const AddressCard = ({
           ? () => setCurrSelectedAddress(addressInfo)
           : null
       }
-      //   className={`cursor-pointer border-red-700 ${
-      //     selectedId?._id === addressInfo?._id
-      //       ? "border-red-900 border-[4px]"
-      //       : "border-black"
-      //   }`}
+      className={`cursor-pointer border-red-700 ${
+        selectedId?._id === addressInfo?._id
+          ? "border-red-900 border-[4px]"
+          : "border-black"
+      }`}
     >
       <CardContent className="grid p-4 gap-4">
         <Label>Address: {addressInfo?.address}</Label>

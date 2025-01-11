@@ -144,10 +144,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           </div>
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-center gap-0.5">
-              <StarRating
-                rating={productDetails?.averageReview}
-                // handleRatingChange={handleRatingChange}
-              />
+              <StarRating rating={productDetails?.averageReview} />
             </div>
             <span className="text-muted-foreground">
               ({productDetails?.averageReview})
@@ -173,6 +170,8 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             )}
           </div>
           <Separator />
+
+          {/* Review section */}
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
             <div className="grid gap-6">

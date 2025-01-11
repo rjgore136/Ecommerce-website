@@ -101,8 +101,8 @@ const HeaderRightContent = () => {
           className="relative"
         >
           <ShoppingCart className="w-6 h-6" />
-          <span className="absolute top-[-5px] right-[2px] text-sm font-bold">
-            {cartItems?.items.length || 0}
+          <span className="absolute top-[-9px] right-[0.5px] text-sm font-bold">
+            {cartItems?.items?.length || 0}
           </span>
           <span className="sr-only">User Cart</span>
         </Button>

@@ -28,7 +28,7 @@ const AuthRegister = () => {
         navigate("/auth/login");
       } else {
         toast({
-          title: data?.payload?.message,
+          title: "Somthing went wrong!Please try after sometime.",
           variant: "destructive",
         });
       }
