@@ -62,7 +62,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 
   //add review
   function handleAddReview() {
-    console.log("handlwReview");
+    // console.log("handlwReview");
 
     dispatch(
       addReview({
@@ -104,12 +104,13 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
   useEffect(() => {
     if (productDetails !== null) dispatch(getAllReviews(productDetails?._id));
   }, [productDetails]);
-  console.log("Reviews", reviews);
-  console.log(productDetails);
+  // console.log("Reviews", reviews);
+  // console.log(productDetails);
+  // className="grid lg:grid-cols-2  sm:grid-cols-1 sm:overflow-y-auto md:grid-cols-1 md:max-h-[90vh] md:overflow-y-auto gap-8 sm:p-14 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] sm:max-h-[90vh] lg:overflow-y-auto lg:p-4 md:p-10"
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
-      <DialogContent className="grid lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1 md:max-h-[90vh] md:overflow-y-auto gap-8 sm:p-14 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] sm:max-h-[90vh] lg:overflow-y-auto lg:p-4 md:p-10 sm:overflow-y-auto ">
+      <DialogContent className="grid lg:grid-cols-2 sm:grid-cols-1 gap-8 p-10 max-w-[90vw] max-h-[90vh] overflow-y-auto">
         <DialogTitle className="sr-only">Title</DialogTitle>
         <DialogDescription className="sr-only">
           This is dialog desc
@@ -178,7 +179,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
               {reviews && reviews.length ? (
                 reviews.map((review) => {
                   return (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4" key={review._id}>
                       <Avatar className="w-10 h-10 border">
                         <AvatarFallback>
                           {review.userName[0].toUpperCase()}

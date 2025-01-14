@@ -12,7 +12,7 @@ const initialState = {
 export const addReview = createAsyncThunk(
   "/shop/addReview",
   async ({ productId, userId, userName, reviewMessage, reviewValue }) => {
-    console.log("addReview");
+    // console.log("addReview");
 
     const response = await axios.post(`${baseUrl}/shop/reviews/add`, {
       productId,
@@ -30,7 +30,7 @@ export const addReview = createAsyncThunk(
 export const getAllReviews = createAsyncThunk(
   "/shop/getAllReviews",
   async (productId) => {
-    console.log("getAllReviews");
+    // console.log("getAllReviews");
     const response = await axios.get(`${baseUrl}/shop/reviews/${productId}`);
     return response.data;
   }
@@ -46,7 +46,7 @@ const reviewSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getAllReviews.fulfilled, (state, action) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = false;
         state.reviews = action.payload.data;

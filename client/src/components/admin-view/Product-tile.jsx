@@ -23,12 +23,14 @@ function AdminProductTile({
           <div className="flex justify-between items-center mb-2">
             <span
               className={`${
-                product?.salePrice > 0 ? "line-through" : ""
+                product?.salePrice > 0 && product?.salePrice < product?.price
+                  ? "line-through"
+                  : ""
               } text-lg font-semibold text-primary`}
             >
               ${product?.price}
             </span>
-            {product?.salePrice > 0 ? (
+            {product?.salePrice > 0 && product?.salePrice < product?.price ? (
               <span className="text-lg font-bold">${product?.salePrice}</span>
             ) : null}
           </div>

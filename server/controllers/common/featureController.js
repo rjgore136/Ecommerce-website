@@ -49,3 +49,33 @@ export const getFeatureImages = async (req, res) => {
     });
   }
 };
+
+export const deleteFeatureImg = async (req, res) => {
+  try {
+    const { imgId } = req.params;
+    if (!imgId) {
+      return res.json({
+        success: false,
+        message: "Some error occured!!",
+      });
+    }
+
+    const deletedImg = await Feature.findByIdAndDelete(imgId);
+    if (!deletedImg) {
+      return res.json({
+        success: false,
+        message: "Couldn't able to delete the image!!",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: deletedImg,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

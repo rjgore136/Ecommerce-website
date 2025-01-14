@@ -122,8 +122,8 @@ const ShopHome = () => {
   // console.log("ProductList:", productsList);
 
   return (
-    <div className="flex flex-col min-h-sreen">
-      <div className="relative w-full h-[600px] overflow-hidden">
+    <div className="flex flex-col min-h-screen">
+      <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden">
         {featureImages && featureImages.length > 0
           ? featureImages.map((slide, index) => {
               return (
@@ -164,6 +164,48 @@ const ShopHome = () => {
           <ChevronRightIcon className="w-4 h-4" />
         </Button>
       </div>
+      {/* <div className="flex flex-col min-h-screen">
+        <div className="relative w-full h-[600px] sm:h-[400px] md:h-[500px] overflow-hidden">
+          {featureImages && featureImages.length > 0
+            ? featureImages.map((slide, index) => {
+                return (
+                  <img
+                    src={slide?.image}
+                    key={index}
+                    className={`${
+                      index === currentSlide ? "opacity-100" : "opacity-0"
+                    } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+                  />
+                );
+              })
+            : null}
+          <Button
+            variant="outline"
+            size="icon"
+            className={`absolute top-1/2 left-4 transform-y-1/2 bg-white/80`}
+            onClick={() => {
+              setCurrentSlide(
+                (prevSlide) =>
+                  (prevSlide - 1 + featureImages.length) % featureImages.length
+              );
+            }}
+          >
+            <ChevronLeftIcon className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className={`absolute top-1/2 right-4 transform-y-1/2 bg-white/80`}
+            onClick={() => {
+              setCurrentSlide(
+                (prevSlide) => (prevSlide + 1) % featureImages.length
+              );
+            }}
+          >
+            <ChevronRightIcon className="w-4 h-4" />
+          </Button>
+        </div>
+      </div> */}
 
       {/* categories with icon */}
       <section className="py-12 bg-gray-50">

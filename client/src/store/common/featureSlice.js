@@ -34,6 +34,16 @@ export const getFeatureImages = createAsyncThunk(
   }
 );
 
+//delete a feature image
+export const deleteFeatureImg = createAsyncThunk(
+  "feature/deleteFeatureImage",
+  async (imgId) => {
+    console.log("deleteFeatureImg");
+    const response = await axios.delete(`${baseUrl}/common/feature/${imgId}`);
+    return response.data;
+  }
+);
+
 export const featureSlice = createSlice({
   name: "featureSlice",
   initialState,

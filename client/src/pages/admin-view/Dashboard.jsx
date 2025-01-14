@@ -4,7 +4,11 @@ import ProductImageUpload from "../../components/admin-view/Image-upload";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
-import { addFeatureImage, getFeatureImages } from "@/store/common/featureSlice";
+import {
+  addFeatureImage,
+  deleteFeatureImg,
+  getFeatureImages,
+} from "@/store/common/featureSlice";
 import { Heading1 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -35,6 +39,25 @@ const AdminDashboard = () => {
     });
   }
 
+  function handleDeleteImage(imgId) {
+    // console.log(imgId);
+    dispatch(deleteFeatureImg(imgId)).then((data) => {
+      console.log(data);
+      if (data?.payload?.success) {
+        toast({
+          title: "Image deleted!",
+          variant: "destructive",
+        });
+        dispatch(getFeatureImages());
+      } else {
+        toast({
+          title: "Failed to delete! Please try after sometime!!",
+          variant: "destructive",
+        });
+      }
+    });
+  }
+
   useEffect(() => {
     dispatch(getFeatureImages());
   }, [dispatch]);
@@ -59,7 +82,28 @@ const AdminDashboard = () => {
         {featureImages && featureImages.length > 0 ? (
           featureImages.map((featureImage) => {
             return (
-              <div className="relative">
+              // <div className="relative" key={featureImage._id}>
+              //   <Button
+              //     variant="destructive"
+              //     className="mb-3"
+              //     onClick={() => handleDeleteImage(featureImage._id)}
+              //   >
+              //     Delete
+              //   </Button>
+              //   <img
+              //     src={featureImage?.image}
+              //     alt={featureImage?.title}
+              //     className="w-full h-[300px] object-cover rounded-t-lg"
+              //   />
+              // </div>
+              <div className="relative group" key={featureImage._id}>
+                <Button
+                  variant="destructive"
+                  className="mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-600"
+                  onClick={() => handleDeleteImage(featureImage._id)}
+                >
+                  Delete
+                </Button>
                 <img
                   src={featureImage?.image}
                   alt={featureImage?.title}

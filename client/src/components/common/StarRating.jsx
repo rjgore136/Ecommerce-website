@@ -11,6 +11,7 @@ function StarRating({ rating, handleRatingChange }) {
           ? "text-yellow-500 hover:bg-black"
           : "text-black hover:bg-primary hover:text-primary-foreground"
       }`}
+      key={star}
       variant="outline"
       size="icon"
       onClick={handleRatingChange ? () => handleRatingChange(star) : null}
