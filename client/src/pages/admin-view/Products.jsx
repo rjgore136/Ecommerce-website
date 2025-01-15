@@ -1,6 +1,6 @@
 import ProductImageUpload from "@/components/admin-view/Image-upload";
 import AdminProductTile from "@/components/admin-view/Product-tile";
-import CommonForm from "@/components/common/form";
+import CommonForm from "@/components/common/Form";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
