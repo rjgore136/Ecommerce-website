@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import AuthLogin from "./pages/auth/Login";
 import AuthRegister from "./pages/auth/Register";
 import Home from "./pages/Home";
-import AdminLayout from "./components/admin-view/layout";
+import AdminLayout from "./components/admin-view/Layout";
 import AdminDashboard from "./pages/admin-view/Dashboard";
 import AdminOrders from "./pages/admin-view/Orders";
 import AdminProducts from "./pages/admin-view/Products";
