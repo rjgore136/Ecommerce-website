@@ -11,9 +11,9 @@ const initialState = {
 export const getSearchResults = createAsyncThunk(
   "/shop/getSearchResults",
   async (keyword) => {
-    console.log("/shop/getSearchResults");
+    // console.log("/shop/getSearchResults");
     const response = await axios.get(`${baseUrl}/shop/search/${keyword}`);
-    console.log("searchResults", response.data);
+    // console.log("searchResults", response.data);
 
     return response.data;
   }
@@ -33,7 +33,7 @@ const searchSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getSearchResults.fulfilled, (state, action) => {
-        console.log(action.payload);
+        // console.log(action.payload);
 
         state.isLoading = false;
         state.searchResults = action.payload.data;

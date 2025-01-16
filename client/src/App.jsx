@@ -3,7 +3,6 @@ import AuthLayout from "./components/auth/Layout";
 import { Route, Routes } from "react-router-dom";
 import AuthLogin from "./pages/auth/Login";
 import AuthRegister from "./pages/auth/Register";
-import Home from "./pages/Home";
 import AdminLayout from "./components/admin-view/Layout";
 import AdminDashboard from "./pages/admin-view/Dashboard";
 import AdminOrders from "./pages/admin-view/Orders";
@@ -30,7 +29,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkAuth());
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    // console.log(token, "token");
+
+    dispatch(checkAuth(token));
   }, [dispatch]);
 
   if (isLoading)

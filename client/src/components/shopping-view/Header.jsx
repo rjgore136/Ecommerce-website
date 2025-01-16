@@ -30,7 +30,10 @@ import { useState, useEffect } from "react";
 import { Avatar } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "@/store/auth/authSlice.js";
+import {
+  logoutUser,
+  resetTokenAndCredentials,
+} from "@/store/auth/authSlice.js";
 import UserCartWrapper from "./cart-wrapper.jsx";
 
 const MenuItems = ({ setOpen }) => {
@@ -50,7 +53,7 @@ const MenuItems = ({ setOpen }) => {
         ? { category: [currentItem.id] }
         : null;
 
-    console.log(currFilters);
+    // console.log(currFilters);
 
     sessionStorage.setItem("filters", JSON.stringify(currFilters));
     location.pathname.includes("listing") && currFilters !== null
@@ -58,7 +61,7 @@ const MenuItems = ({ setOpen }) => {
       : navigate(currentItem.path);
   }
   return (
-    <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row sm:mt-5 sm:ml-7">
+    <nav className="flex flex-col mb-3  lg:items-center gap-6 lg:flex-row lg:mb-10 sm:mt-10 sm:ml-7 ml-7 mt-7 md:mt-10">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Label
           onClick={() => {
@@ -84,7 +87,10 @@ const HeaderRightContent = () => {
   const dispatch = useDispatch();
 
   function handleLogout() {
-    dispatch(logoutUser());
+    dispatch(resetTokenAndCredentials());
+    sessionStorage.clear();
+    navigate("/auth/login");
+    // dispatch(logoutUser());
   }
 
   useEffect(() => {
@@ -92,7 +98,7 @@ const HeaderRightContent = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex lg:items-center lg:flex-row flex-col gap-4 sm:flex-row mt-0 sm:mt-[80%] lg:mt-0">
+    <div className="flex lg:items-center lg:flex-row flex-col gap-4 sm:flex-row mt-0 sm:mt-[18] lg:mt-0 ml-6 mt-20">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <Button
           onClick={() => setOpenCartSheet(true)}
@@ -147,7 +153,8 @@ const ShoppingHeader = () => {
         <div className="flex h-16 items-center justify-between px-4 md:px-6">
           <Link to="/shop/home" className="flex items-center gap-2">
             <HousePlug className="h-6 w-6" />
-            <span className="font-bold">Ecommerce</span>
+            {/* <img src="../../assets/favicon.ico" alt="" /> */}
+            <span className="font-bold">SnapMart</span>
           </Link>
           <Sheet>
             <SheetTrigger asChild>
@@ -163,14 +170,14 @@ const ShoppingHeader = () => {
               <DialogDescription className="sr-only">
                 This is the menu
               </DialogDescription>
-              <SheetHeader>
+              <SheetHeader className="mb-4">
                 <SheetTitle>
                   <Link
                     to="/shop/home"
                     className="flex items-center gap-2 sm:mt-0"
                   >
                     <HousePlug className="h-6 w-6" />
-                    <span className="font-bold">Ecommerce</span>
+                    <span className="font-bold">SnapMart</span>
                   </Link>
                 </SheetTitle>
               </SheetHeader>

@@ -12,7 +12,7 @@ const initialState = {
 export const addFeatureImage = createAsyncThunk(
   "/feature/addFeatureImage",
   async (image) => {
-    console.log("addFeatureImage");
+    // console.log("addFeatureImage");
 
     const response = await axios.post(`${baseUrl}/common/feature/add`, {
       image,
@@ -26,7 +26,7 @@ export const addFeatureImage = createAsyncThunk(
 export const getFeatureImages = createAsyncThunk(
   "/feature/getFeatureImages",
   async (image) => {
-    console.log("getFeatureImages");
+    // console.log("getFeatureImages");
 
     const response = await axios.get(`${baseUrl}/common/feature/get`);
 
@@ -38,7 +38,7 @@ export const getFeatureImages = createAsyncThunk(
 export const deleteFeatureImg = createAsyncThunk(
   "feature/deleteFeatureImage",
   async (imgId) => {
-    console.log("deleteFeatureImg");
+    // console.log("deleteFeatureImg");
     const response = await axios.delete(`${baseUrl}/common/feature/${imgId}`);
     return response.data;
   }
@@ -54,7 +54,7 @@ export const featureSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getFeatureImages.fulfilled, (state, action) => {
-        console.log(action);
+        // console.log(action);
 
         state.isLoading = false;
         state.featureImages = action.payload.data;

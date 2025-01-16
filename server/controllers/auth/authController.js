@@ -91,9 +91,21 @@ export const loginUser = async (req, res) => {
         );
 
         //send the token via cookie
-        res.cookie("token", token, { httpOnly: true, secure: false }).json({
+        // res.cookie("token", token, { httpOnly: true, secure: false }).json({
+        //   success: true,
+        //   message: "Logged in successfully",
+        //   user: {
+        //     email: checkUser.email,
+        //     role: checkUser.role,
+        //     id: checkUser._id,
+        //     userName: checkUser.userName,
+        //   },
+        // });
+
+        res.json({
           success: true,
-          message: "Logged in successfully",
+          message: "Logged in successfully!",
+          token,
           user: {
             email: checkUser.email,
             role: checkUser.role,
@@ -125,7 +137,14 @@ export const logoutUser = async (req, res) => {
 };
 
 export const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+  // const token = req.cookies.token;
+  // console.log(req.headers);
+
+  const authHeader = req.headers["authorization"];
+  // console.log(authHeader);
+
+  const token = authHeader && authHeader.split(" ")[1];
+  // console.log(token);
 
   if (!token) {
     return res.json({

@@ -14,7 +14,7 @@ export const getAllOrdersForAdmin = createAsyncThunk(
     console.log("getAllOrdersForAdmin");
 
     const response = await axios.get(`${baseUrl}/admin/order/get`);
-    console.log(response);
+    // console.log(response);
 
     return response.data;
   }
@@ -50,7 +50,7 @@ const adminOrderSlice = createSlice({
   initialState,
   reducers: {
     resetOrderDetails: (state) => {
-      console.log("resetOrderDetails");
+      // console.log("resetOrderDetails");
 
       state.orderDetails = null;
     },
@@ -61,7 +61,7 @@ const adminOrderSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getAllOrdersForAdmin.fulfilled, (state, action) => {
-        console.log(action.payload);
+        // console.log(action.payload);
 
         state.isLoading = false;
         state.orderList = action.payload.data;

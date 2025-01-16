@@ -29,17 +29,17 @@ export const createNewOrder = createAsyncThunk(
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
   async ({ paymentId, payerId, orderId }) => {
-    console.log("capturePayment");
+    // console.log("capturePayment");
 
-    console.log("PaymentId", paymentId);
-    console.log("PayerId", payerId);
-    console.log("currentOrderId", orderId);
+    // console.log("PaymentId", paymentId);
+    // console.log("PayerId", payerId);
+    // console.log("currentOrderId", orderId);
     const response = await axios.post(`${baseUrl}/shop/order/capture`, {
       paymentId,
       payerId,
       orderId,
     });
-    console.log(response);
+    // console.log(response);
 
     return response.data;
   }
@@ -49,12 +49,12 @@ export const capturePayment = createAsyncThunk(
 export const getAllOrders = createAsyncThunk(
   "/order/getAllOrders",
   async (userId) => {
-    console.log("getAllOrders");
+    // console.log("getAllOrders");
     const response = await axios.get(
       `${baseUrl}/shop/order/list-orders/${userId}`
     );
 
-    console.log("Orders", response.data);
+    // console.log("Orders", response.data);
     return response.data;
   }
 );
@@ -67,7 +67,7 @@ export const getOrderDetails = createAsyncThunk(
       `${baseUrl}/shop/order/order-details/${orderId}`
     );
 
-    console.log("Order details", response.data);
+    // console.log("Order details", response.data);
     return response.data;
   }
 );
@@ -77,7 +77,7 @@ const shoppingOrderSlice = createSlice({
   initialState,
   reducers: {
     resetOrderDetails: (state) => {
-      console.log("resetOrderDetails");
+      // console.log("resetOrderDetails");
 
       state.orderDetails = null;
     },
@@ -107,7 +107,7 @@ const shoppingOrderSlice = createSlice({
         // console.log(action);
       })
       .addCase(capturePayment.fulfilled, (state, action) => {
-        console.log(action);
+        // console.log(action);
       })
       .addCase(getAllOrders.pending, (state) => {
         state.isLoading = true;
