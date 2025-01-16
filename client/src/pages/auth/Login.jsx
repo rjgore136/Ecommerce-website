@@ -25,6 +25,11 @@ const AuthLogin = () => {
         toast({
           title: data?.payload?.message,
         });
+      } else if (!data?.payload?.success) {
+        toast({
+          title: data?.payload?.message,
+          variant: "destructive",
+        });
       } else {
         toast({
           title: "Somthing went wrong!Please try after sometime.",
