@@ -17,6 +17,7 @@ import shoppingProductsRouter from "./routes/shop/product-routes.js";
 import reviewsRouter from "./routes/shop/reviews-routes.js";
 
 import commonFeatureRouter from "./routes/common/feature-routes.js";
+import rateLimiter from "./Middlewares/rateLimitter.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ const app = express();
 connectDB(url);
 
 //middlewares
+app.use(rateLimiter);
 app.use(
   cors({
     origin: process.env.CLIENT_BASE_URL,
