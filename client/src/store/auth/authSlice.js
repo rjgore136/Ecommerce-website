@@ -24,7 +24,7 @@ export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
   const response = await axios.post(`${baseUrl}/auth/login`, formData, {
     withCredentials: true,
   });
-  // console.log(response);
+  console.log(response);
   return response.data;
 });
 
@@ -113,12 +113,14 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        // console.log(action);
+        console.log(action);
         state.isLoading = false;
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
       })
       .addCase(checkAuth.rejected, (state, action) => {
+        console.log(action);
+
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;

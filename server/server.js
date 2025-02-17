@@ -41,6 +41,7 @@ app.use(
       "Cache-Control",
       "Expires",
       "Pragma",
+      "Retry-After",
     ],
     credentials: true,
   })
